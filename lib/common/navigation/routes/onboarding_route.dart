@@ -1,10 +1,6 @@
 part of '../med_rive_router.dart';
 
-@TypedGoRoute<OnboardingRoute>(
-  path: '/onboarding',
-  name: 'OnboardingRoute',
-  routes: [TypedGoRoute<BreathSessionRoute>(path: 'breath-session')],
-)
+@TypedGoRoute<OnboardingRoute>(path: '/onboarding', name: 'OnboardingRoute')
 class OnboardingRoute extends GoRouteData with $OnboardingRoute {
   const OnboardingRoute();
 

@@ -106,17 +106,41 @@ abstract class AppLocalizations {
   /// **'This is a placeholder'**
   String get commonPlaceholder;
 
+  /// No description provided for @commonLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get commonLoading;
+
+  /// No description provided for @startupPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Startup'**
+  String get startupPageTitle;
+
   /// No description provided for @onboardingPageTitle.
   ///
   /// In en, this message translates to:
   /// **'Onboarding'**
   String get onboardingPageTitle;
 
+  /// No description provided for @onboardButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboardButtonLabel;
+
   /// No description provided for @breathSessionPageTitle.
   ///
   /// In en, this message translates to:
   /// **'Breath Session'**
   String get breathSessionPageTitle;
+
+  /// No description provided for @startBreathingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish session'**
+  String get startBreathingLabel;
 }
 
 class _AppLocalizationsDelegate

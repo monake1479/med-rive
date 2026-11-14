@@ -2,6 +2,10 @@
     "@@locale": "en",
     "appName": "Med Rive",
     "commonPlaceholder": "This is a placeholder",
+    "commonLoading": "Loading...",
+    "startupPageTitle": "Startup",
     "onboardingPageTitle": "Onboarding",
-    "breathSessionPageTitle": "Breath Session"
+    "onboardButtonLabel": "Continue",
+    "breathSessionPageTitle": "Breath Session",
+    "startBreathingLabel": "Finish session"
 }

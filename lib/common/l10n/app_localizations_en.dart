@@ -16,8 +16,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonPlaceholder => 'This is a placeholder';
 
   @override
+  String get commonLoading => 'Loading...';
+
+  @override
+  String get startupPageTitle => 'Startup';
+
+  @override
   String get onboardingPageTitle => 'Onboarding';
 
   @override
+  String get onboardButtonLabel => 'Continue';
+
+  @override
   String get breathSessionPageTitle => 'Breath Session';
+
+  @override
+  String get startBreathingLabel => 'Finish session';
 }
