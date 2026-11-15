@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:med_rive/common/injection/injectable.dart';
 import 'package:med_rive/common/l10n/app_localizations.dart';
@@ -8,6 +9,15 @@ class MedRiveApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final baseTheme = ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF006B62)),
+    );
+
+    final theme = baseTheme.copyWith(
+      textTheme: GoogleFonts.robotoTextTheme(baseTheme.textTheme),
+    );
+
     return MaterialApp.router(
       title: 'Med Rive',
       localizationsDelegates: [
@@ -15,9 +25,7 @@ class MedRiveApp extends StatelessWidget {
         ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.lightGreenAccent),
-      ),
+      theme: theme,
       routerConfig: getIt.get<MedRiveRouter>().router,
     );
   }
