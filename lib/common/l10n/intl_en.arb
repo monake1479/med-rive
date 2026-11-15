@@ -9,5 +9,21 @@
     "startBreathingLabel": "Finish session",
     "startupLoadingMessage": "We’re loading your profile and checking whether this is your first visit.",
     "startupFooter": "A moment for yourself.",
-    "startupLoadingError": "We couldn’t load your preferences. Please try again."
+    "startupLoadingError": "We couldn’t load your preferences. Please try again.",
+    "onboardingWelcomeUpperTitle": "A LITTLE SPACE FOR YOU",
+    "onboardingWelcomeTitle": "Make room to breathe.",
+    "onboardingWelcomeDescription": "A moment of stillness.\nA rhythm that feels like yours.",
+    "onboardingRhythmUpperTitle": "FIND YOUR OWN RHYTHM",
+    "onboardingRhythmTitle": "A rhythm of your own.",
+    "onboardingRhythmDescription": "Choose a pace. Watch the air respond.\nMake this moment yours.",
+    "onboardingFinishLabel": "Find my rhythm",
+    "onboardingSaveError": "We couldn’t save your progress. Please try again.",
+    "onboardingPageIndicator": "Page {page} of 2",
+    "@onboardingPageIndicator": {
+        "placeholders": {
+            "page": {
+                "type": "int"
+            }
+        }
+    }
 }

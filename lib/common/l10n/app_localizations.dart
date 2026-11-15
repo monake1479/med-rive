@@ -153,6 +153,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We couldn’t load your preferences. Please try again.'**
   String get startupLoadingError;
+
+  /// No description provided for @onboardingWelcomeUpperTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A LITTLE SPACE FOR YOU'**
+  String get onboardingWelcomeUpperTitle;
+
+  /// No description provided for @onboardingWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make room to breathe.'**
+  String get onboardingWelcomeTitle;
+
+  /// No description provided for @onboardingWelcomeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A moment of stillness.\nA rhythm that feels like yours.'**
+  String get onboardingWelcomeDescription;
+
+  /// No description provided for @onboardingRhythmUpperTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'FIND YOUR OWN RHYTHM'**
+  String get onboardingRhythmUpperTitle;
+
+  /// No description provided for @onboardingRhythmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A rhythm of your own.'**
+  String get onboardingRhythmTitle;
+
+  /// No description provided for @onboardingRhythmDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pace. Watch the air respond.\nMake this moment yours.'**
+  String get onboardingRhythmDescription;
+
+  /// No description provided for @onboardingFinishLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Find my rhythm'**
+  String get onboardingFinishLabel;
+
+  /// No description provided for @onboardingSaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t save your progress. Please try again.'**
+  String get onboardingSaveError;
+
+  /// No description provided for @onboardingPageIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page} of 2'**
+  String onboardingPageIndicator(int page);
 }
 
 class _AppLocalizationsDelegate
