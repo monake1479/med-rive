@@ -1,11 +1,13 @@
 {
     "@@locale": "en",
     "appName": "Med Rive",
-    "commonPlaceholder": "This is a placeholder",
     "commonLoading": "Loading...",
-    "startupPageTitle": "Startup",
+    "commonRetry": "Try again",
     "onboardingPageTitle": "Onboarding",
     "onboardButtonLabel": "Continue",
     "breathSessionPageTitle": "Breath Session",
-    "startBreathingLabel": "Finish session"
+    "startBreathingLabel": "Finish session",
+    "startupLoadingMessage": "We’re loading your profile and checking whether this is your first visit.",
+    "startupFooter": "A moment for yourself.",
+    "startupLoadingError": "We couldn’t load your preferences. Please try again."
 }

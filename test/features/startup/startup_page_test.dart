@@ -37,12 +37,16 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump(const Duration(milliseconds: 400));
   }
 
   Future<void> emitState(WidgetTester tester, OnboardingState state) async {
     states.add(state);
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump(const Duration(milliseconds: 400));
   }
 
   void flowTest(String name, Future<void> Function(WidgetTester) body) {
@@ -62,12 +66,19 @@ void main() {
     tester,
   ) async {
     expect(find.byType(StartupPage), findsOneWidget);
+    expect(find.byType(AppBar), findsNothing);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('startup-rive-slot'))).height,
+      280,
+    );
+    expect(find.text('med rive'), findsOneWidget);
+    expect(find.text('A moment for yourself.'), findsOneWidget);
     await emitState(
       tester,
       const OnboardingState(status: OnboardingStatus.loading),
     );
     await tester.pump(const Duration(seconds: 5));
-    expect(find.text('Loading...'), findsOneWidget);
+    expect(find.byType(LinearProgressIndicator), findsOneWidget);
     expect(find.byType(OnboardingPage), findsNothing);
     expect(find.byType(BreathSessionPage), findsNothing);
     expect(router.router.routeInformationProvider.value.uri.path, '/');
@@ -100,7 +111,9 @@ void main() {
       );
       expect(router.router.canPop(), isFalse);
       await tester.binding.handlePopRoute();
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 400));
       expect(find.byType(StartupPage), findsNothing);
     });
   }
@@ -115,7 +128,12 @@ void main() {
       OnboardingState(status: OnboardingStatus.failure, exception: error),
     );
     expect(find.byType(StartupPage), findsOneWidget);
-    expect(find.textContaining('Unable to read'), findsOneWidget);
+    expect(
+      find.text('We couldn’t load your preferences. Please try again.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.widgetWithText(FilledButton, 'Try again'));
+    verify(() => bloc.add(const OnboardingStarted())).called(1);
     expect(find.byType(OnboardingPage), findsNothing);
     expect(find.byType(BreathSessionPage), findsNothing);
     expect(router.router.routeInformationProvider.value.uri.path, '/');

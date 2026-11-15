@@ -100,23 +100,17 @@ abstract class AppLocalizations {
   /// **'Med Rive'**
   String get appName;
 
-  /// No description provided for @commonPlaceholder.
-  ///
-  /// In en, this message translates to:
-  /// **'This is a placeholder'**
-  String get commonPlaceholder;
-
   /// No description provided for @commonLoading.
   ///
   /// In en, this message translates to:
   /// **'Loading...'**
   String get commonLoading;
 
-  /// No description provided for @startupPageTitle.
+  /// No description provided for @commonRetry.
   ///
   /// In en, this message translates to:
-  /// **'Startup'**
-  String get startupPageTitle;
+  /// **'Try again'**
+  String get commonRetry;
 
   /// No description provided for @onboardingPageTitle.
   ///
@@ -141,6 +135,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Finish session'**
   String get startBreathingLabel;
+
+  /// No description provided for @startupLoadingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We’re loading your profile and checking whether this is your first visit.'**
+  String get startupLoadingMessage;
+
+  /// No description provided for @startupFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'A moment for yourself.'**
+  String get startupFooter;
+
+  /// No description provided for @startupLoadingError.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t load your preferences. Please try again.'**
+  String get startupLoadingError;
 }
 
 class _AppLocalizationsDelegate

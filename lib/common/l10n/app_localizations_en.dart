@@ -13,13 +13,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'Med Rive';
 
   @override
-  String get commonPlaceholder => 'This is a placeholder';
-
-  @override
   String get commonLoading => 'Loading...';
 
   @override
-  String get startupPageTitle => 'Startup';
+  String get commonRetry => 'Try again';
 
   @override
   String get onboardingPageTitle => 'Onboarding';
@@ -32,4 +29,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startBreathingLabel => 'Finish session';
+
+  @override
+  String get startupLoadingMessage =>
+      'We’re loading your profile and checking whether this is your first visit.';
+
+  @override
+  String get startupFooter => 'A moment for yourself.';
+
+  @override
+  String get startupLoadingError =>
+      'We couldn’t load your preferences. Please try again.';
 }
