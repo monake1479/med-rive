@@ -10,46 +10,102 @@ class StartupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(l10n.startupPageTitle),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: .center,
-          children: [
-            BlocConsumer<OnboardingBloc, OnboardingState>(
-              listenWhen: (previous, current) {
-                return previous.status != current.status;
-              },
-              listener: (context, state) async {
-                if (state.status.isInProgress) {
-                  const OnboardingRoute().go(context);
-                } else if (state.status.isCompleted) {
-                  const BreathSessionRoute().go(context);
-                }
-              },
-              builder: (context, state) {
-                // TODO(Daniel): Texts below will be replaced soon with AppLocalizations.
-                switch (state.status) {
-                  case OnboardingStatus.initial:
-                    return Text('Initial');
-                  case OnboardingStatus.loading:
-                    return Text(AppLocalizations.of(context).commonLoading);
-                  case OnboardingStatus.completed:
-                    return Text('Completed');
-                  case OnboardingStatus.inProgress:
-                    return Text('In progress, should be redirected');
-                  case OnboardingStatus.failure:
-                    final exception = state.exception;
-                    return Text('Failure! Exception: $exception');
-                }
-              },
+      body: BlocConsumer<OnboardingBloc, OnboardingState>(
+        listenWhen: (previous, current) => previous.status != current.status,
+        listener: (context, state) {
+          if (state.status.isInProgress) {
+            const OnboardingRoute().go(context);
+          } else if (state.status.isCompleted) {
+            const BreathSessionRoute().go(context);
+          }
+        },
+        builder: (context, state) {
+          final failed = state.status == OnboardingStatus.failure;
+
+          return SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: (constraints.maxHeight - 72).clamp(
+                            480.0,
+                            double.infinity,
+                          ),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 480),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // TODO(Daniel): Replace this SizedBox with real Rive animation.
+                                  const SizedBox(
+                                    key: ValueKey('startup-rive-slot'),
+                                    height: 280,
+                                    width: double.infinity,
+                                  ),
+                                  const SizedBox(height: 24),
+                                  Text(
+                                    l10n.appName,
+                                    style: theme.textTheme.headlineMedium,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 24),
+                                  Text(
+                                    failed
+                                        ? l10n.startupLoadingError
+                                        : l10n.startupLoadingMessage,
+                                    style: theme.textTheme.bodyLarge?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+
+                                  const SizedBox(height: 24),
+                                  Builder(
+                                    builder: (context) {
+                                      if (failed) {
+                                        return FilledButton(
+                                          onPressed: () => context
+                                              .read<OnboardingBloc>()
+                                              .add(const OnboardingStarted()),
+                                          child: Text(l10n.commonRetry),
+                                        );
+                                      }
+                                      return const SizedBox(
+                                        width: 48,
+                                        child: LinearProgressIndicator(),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          l10n.startupFooter,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
