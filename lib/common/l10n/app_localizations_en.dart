@@ -40,4 +40,36 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get startupLoadingError =>
       'We couldn’t load your preferences. Please try again.';
+
+  @override
+  String get onboardingWelcomeUpperTitle => 'A LITTLE SPACE FOR YOU';
+
+  @override
+  String get onboardingWelcomeTitle => 'Make room to breathe.';
+
+  @override
+  String get onboardingWelcomeDescription =>
+      'A moment of stillness.\nA rhythm that feels like yours.';
+
+  @override
+  String get onboardingRhythmUpperTitle => 'FIND YOUR OWN RHYTHM';
+
+  @override
+  String get onboardingRhythmTitle => 'A rhythm of your own.';
+
+  @override
+  String get onboardingRhythmDescription =>
+      'Choose a pace. Watch the air respond.\nMake this moment yours.';
+
+  @override
+  String get onboardingFinishLabel => 'Find my rhythm';
+
+  @override
+  String get onboardingSaveError =>
+      'We couldn’t save your progress. Please try again.';
+
+  @override
+  String onboardingPageIndicator(int page) {
+    return 'Page $page of 2';
+  }
 }
