@@ -32,14 +32,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startupLoadingMessage =>
-      'We’re loading your profile and checking whether this is your first visit.';
+      'We’re preparing your experience and loading your profile.';
 
   @override
   String get startupFooter => 'A moment for yourself.';
 
   @override
   String get startupLoadingError =>
-      'We couldn’t load your preferences. Please try again.';
+      'We couldn’t prepare your experience. Please try again.';
 
   @override
   String get onboardingWelcomeUpperTitle => 'A LITTLE SPACE FOR YOU';
@@ -49,7 +49,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingWelcomeDescription =>
-      'A moment of stillness.\nA rhythm that feels like yours.';
+      'A guided breathing space.\nFollow the ribbon, one breath at a time.';
 
   @override
   String get onboardingRhythmUpperTitle => 'FIND YOUR OWN RHYTHM';
@@ -59,7 +59,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingRhythmDescription =>
-      'Choose a pace. Watch the air respond.\nMake this moment yours.';
+      'Choose your breathing pace.\nSee it come to life, then explore your plan.';
 
   @override
   String get onboardingFinishLabel => 'Find my rhythm';
@@ -72,4 +72,118 @@ class AppLocalizationsEn extends AppLocalizations {
   String onboardingPageIndicator(int page) {
     return 'Page $page of 2';
   }
+
+  @override
+  String get breathRhythmTitle => 'Your rhythm';
+
+  @override
+  String get breathFlowTitle => 'Find your flow.';
+
+  @override
+  String get breathFlowDescription => 'Change the pace. Watch the air respond.';
+
+  @override
+  String get breathPreviewLabel => 'LIVE PREVIEW';
+
+  @override
+  String get breathPaceLabel => 'Breaths per minute';
+
+  @override
+  String breathInhaleDuration(String seconds) {
+    return '$seconds sec inhale';
+  }
+
+  @override
+  String breathExhaleDuration(String seconds) {
+    return '$seconds sec exhale';
+  }
+
+  @override
+  String get breathSeePlan => 'See my plan';
+
+  @override
+  String get breathSelectionNote => 'Your selection shapes the next screen.';
+
+  @override
+  String get breathProfileLoading => 'Loading your profile…';
+
+  @override
+  String get breathProfileError =>
+      'We couldn’t load your profile. Please try again.';
+
+  @override
+  String get planAppBarTitle => 'Your breathing plan';
+
+  @override
+  String planGreeting(String name) {
+    return 'Your rhythm, $name.';
+  }
+
+  @override
+  String planAge(int age) {
+    return '$age years old';
+  }
+
+  @override
+  String get planSelectedPace => 'YOUR BREATHING PACE';
+
+  @override
+  String get planPaceUnit => 'breaths / min';
+
+  @override
+  String planCycle(String seconds) {
+    return 'Breathe in for $seconds sec, out for $seconds sec.';
+  }
+
+  @override
+  String get planAdjust => 'Adjust my rhythm';
+
+  @override
+  String get planNote =>
+      'A preview of your selected rhythm.\nAdjust the pace whenever you like.';
+
+  @override
+  String breathPhaseOption(String seconds) {
+    return '${seconds}s in / out';
+  }
+
+  @override
+  String get planSlowGuidance =>
+      'Take your time. Follow the ring through each long, even breath.';
+
+  @override
+  String get planMediumGuidance =>
+      'Find a steady flow. Keep your inhale and exhale even.';
+
+  @override
+  String get planFasterGuidance =>
+      'Follow a lighter rhythm with short, even breathing phases.';
+
+  @override
+  String get resetAppTitle => 'Reset app';
+
+  @override
+  String get resetAppQuestion =>
+      'Do you want to reset onboarding and restart the app?';
+
+  @override
+  String get resetAppDescription =>
+      'Your selected pace and cached profile will be cleared. You’ll see the introduction again.';
+
+  @override
+  String get resetAppConfirm => 'Reset';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get resetAppError => 'We couldn’t reset the app. Please try again.';
+
+  @override
+  String get breathPaceSaveError =>
+      'We couldn’t save your pace. Please try again.';
+
+  @override
+  String get breathPacesLoadError =>
+      'We couldn’t load the available breathing paces. Please try again.';
 }

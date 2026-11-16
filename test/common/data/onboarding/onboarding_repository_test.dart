@@ -44,7 +44,7 @@ void main() {
   });
 
   test('does not expose an uncommitted write through the cache', () async {
-    final write = Completer<void>();
+    final write = Completer();
     when(source.get).thenAnswer((_) async => false);
     when(() => source.set(true)).thenAnswer((_) => write.future);
     await repository.isOnboarded();

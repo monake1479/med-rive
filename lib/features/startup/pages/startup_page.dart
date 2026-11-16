@@ -2,10 +2,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:med_rive/common/l10n/app_localizations.dart';
 import 'package:med_rive/common/navigation/med_rive_router.dart';
-import 'package:med_rive/features/onboarding/state/onboarding/onboarding_bloc.dart';
+import 'package:med_rive/features/startup/state/startup_cubit.dart';
 
-class StartupPage extends StatelessWidget {
+class StartupPage extends StatefulWidget {
   const StartupPage({super.key});
+
+  @override
+  State<StartupPage> createState() => _StartupPageState();
+}
+
+class _StartupPageState extends State<StartupPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<StartupCubit>().start();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,18 +24,16 @@ class StartupPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: BlocConsumer<OnboardingBloc, OnboardingState>(
-        listenWhen: (previous, current) => previous.status != current.status,
+      body: BlocConsumer<StartupCubit, StartupStatus>(
+        listenWhen: (previous, current) => previous != current,
         listener: (context, state) {
-          if (state.status.isInProgress) {
+          if (state.isInOnboarding) {
             const OnboardingRoute().go(context);
-          } else if (state.status.isCompleted) {
+          } else if (state.isReady) {
             const BreathSessionRoute().go(context);
           }
         },
         builder: (context, state) {
-          final failed = state.status == OnboardingStatus.failure;
-
           return SafeArea(
             child: LayoutBuilder(
               builder: (context, constraints) => SingleChildScrollView(
@@ -59,7 +68,7 @@ class StartupPage extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 24),
                                   Text(
-                                    failed
+                                    state.isFailure
                                         ? l10n.startupLoadingError
                                         : l10n.startupLoadingMessage,
                                     style: theme.textTheme.bodyLarge?.copyWith(
@@ -71,11 +80,11 @@ class StartupPage extends StatelessWidget {
                                   const SizedBox(height: 24),
                                   Builder(
                                     builder: (context) {
-                                      if (failed) {
+                                      if (state.isFailure) {
                                         return FilledButton(
                                           onPressed: () => context
-                                              .read<OnboardingBloc>()
-                                              .add(const OnboardingStarted()),
+                                              .read<StartupCubit>()
+                                              .start(),
                                           child: Text(l10n.commonRetry),
                                         );
                                       }

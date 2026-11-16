@@ -8,6 +8,7 @@ part of 'med_rive_router.dart';
 
 List<RouteBase> get $appRoutes => [
   $breathSessionRoute,
+  $breathPlanRoute,
   $onboardingRoute,
   $startupRoute,
 ];
@@ -38,6 +39,43 @@ mixin $BreathSessionRoute on GoRouteData {
 
   @override
   void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $breathPlanRoute => GoRouteData.$route(
+  path: '/breath-plan',
+  name: 'BreathPlanRoute',
+  hasOverriddenOnExit: false,
+  factory: $BreathPlanRoute._fromState,
+);
+
+mixin $BreathPlanRoute on GoRouteData {
+  static BreathPlanRoute _fromState(GoRouterState state) => BreathPlanRoute(
+    pace: int.parse(state.uri.queryParameters['pace']!),
+    $extra: state.extra as User,
+  );
+
+  BreathPlanRoute get _self => this as BreathPlanRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/breath-plan',
+    queryParams: {'pace': _self.pace.toString()},
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location, extra: _self.$extra);
+
+  @override
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: _self.$extra);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: _self.$extra);
+
+  @override
+  void replace(BuildContext context) =>
+      context.replace(location, extra: _self.$extra);
 }
 
 RouteBase get $onboardingRoute => GoRouteData.$route(

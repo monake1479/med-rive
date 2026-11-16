@@ -58,7 +58,7 @@ void main() {
           .thenAnswer((_) => Future<bool?>.error(cause, trace));
       Object? caught;
       StackTrace? caughtTrace;
-      source.get().then<void>(
+      source.get().then(
         (_) => fail('Expected a read failure'),
         onError: (Object error, StackTrace stack) {
           caught = error;
@@ -84,12 +84,12 @@ void main() {
       final cause = PlatformException(code: 'write_failed');
       final trace = StackTrace.fromString('platform write stack');
       when(() => preferences.setBool('user_onboarded', true))
-          .thenAnswer((_) => Future<void>.error(cause, trace));
+          .thenAnswer((_) => Future.error(cause, trace));
       Object? caught;
       StackTrace? caughtTrace;
       source
           .set(true)
-          .then<void>(
+          .then(
             (_) => fail('Expected a write failure'),
             onError: (Object error, StackTrace stack) {
               caught = error;

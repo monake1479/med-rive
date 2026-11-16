@@ -7,15 +7,15 @@
     "onboardButtonLabel": "Continue",
     "breathSessionPageTitle": "Breath Session",
     "startBreathingLabel": "Finish session",
-    "startupLoadingMessage": "We’re loading your profile and checking whether this is your first visit.",
+    "startupLoadingMessage": "We’re preparing your experience and loading your profile.",
     "startupFooter": "A moment for yourself.",
-    "startupLoadingError": "We couldn’t load your preferences. Please try again.",
+    "startupLoadingError": "We couldn’t prepare your experience. Please try again.",
     "onboardingWelcomeUpperTitle": "A LITTLE SPACE FOR YOU",
     "onboardingWelcomeTitle": "Make room to breathe.",
-    "onboardingWelcomeDescription": "A moment of stillness.\nA rhythm that feels like yours.",
+    "onboardingWelcomeDescription": "A guided breathing space.\nFollow the ribbon, one breath at a time.",
     "onboardingRhythmUpperTitle": "FIND YOUR OWN RHYTHM",
     "onboardingRhythmTitle": "A rhythm of your own.",
-    "onboardingRhythmDescription": "Choose a pace. Watch the air respond.\nMake this moment yours.",
+    "onboardingRhythmDescription": "Choose your breathing pace.\nSee it come to life, then explore your plan.",
     "onboardingFinishLabel": "Find my rhythm",
     "onboardingSaveError": "We couldn’t save your progress. Please try again.",
     "onboardingPageIndicator": "Page {page} of 2",
@@ -25,5 +25,78 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "breathRhythmTitle": "Your rhythm",
+    "breathFlowTitle": "Find your flow.",
+    "breathFlowDescription": "Change the pace. Watch the air respond.",
+    "breathPreviewLabel": "LIVE PREVIEW",
+    "breathPaceLabel": "Breaths per minute",
+    "breathInhaleDuration": "{seconds} sec inhale",
+    "breathExhaleDuration": "{seconds} sec exhale",
+    "breathSeePlan": "See my plan",
+    "breathSelectionNote": "Your selection shapes the next screen.",
+    "@breathInhaleDuration": {
+        "placeholders": {
+            "seconds": {
+                "type": "String"
+            }
+        }
+    },
+    "@breathExhaleDuration": {
+        "placeholders": {
+            "seconds": {
+                "type": "String"
+            }
+        }
+    },
+    "breathProfileLoading": "Loading your profile…",
+    "breathProfileError": "We couldn’t load your profile. Please try again.",
+    "planAppBarTitle": "Your breathing plan",
+    "planGreeting": "Your rhythm, {name}.",
+    "planAge": "{age} years old",
+    "planSelectedPace": "YOUR BREATHING PACE",
+    "planPaceUnit": "breaths / min",
+    "planCycle": "Breathe in for {seconds} sec, out for {seconds} sec.",
+    "planAdjust": "Adjust my rhythm",
+    "planNote": "A preview of your selected rhythm.\nAdjust the pace whenever you like.",
+    "@planGreeting": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "@planAge": {
+        "placeholders": {
+            "age": {
+                "type": "int"
+            }
+        }
+    },
+    "@planCycle": {
+        "placeholders": {
+            "seconds": {
+                "type": "String"
+            }
+        }
+    },
+    "breathPhaseOption": "{seconds}s in / out",
+    "planSlowGuidance": "Take your time. Follow the ring through each long, even breath.",
+    "planMediumGuidance": "Find a steady flow. Keep your inhale and exhale even.",
+    "planFasterGuidance": "Follow a lighter rhythm with short, even breathing phases.",
+    "@breathPhaseOption": {
+        "placeholders": {
+            "seconds": {
+                "type": "String"
+            }
+        }
+    },
+    "resetAppTitle": "Reset app",
+    "resetAppQuestion": "Do you want to reset onboarding and restart the app?",
+    "resetAppDescription": "Your selected pace and cached profile will be cleared. You’ll see the introduction again.",
+    "resetAppConfirm": "Reset",
+    "commonCancel": "Cancel",
+    "resetAppError": "We couldn’t reset the app. Please try again.",
+    "breathPaceSaveError": "We couldn’t save your pace. Please try again.",
+    "breathPacesLoadError": "We couldn’t load the available breathing paces. Please try again."
 }
