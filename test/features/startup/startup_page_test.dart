@@ -4,190 +4,112 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:med_rive/common/error_handling/local_storage_exceptions/local_storage_read_exception.dart';
-import 'package:med_rive/common/error_handling/local_storage_exceptions/local_storage_write_exception.dart';
+import 'package:med_rive/common/data/onboarding/use_cases/get_onboarding_status_use_case.dart';
+import 'package:med_rive/common/data/user/models/user.dart';
+import 'package:med_rive/common/data/user/use_cases/get_user_use_case.dart';
+import 'package:med_rive/common/injection/injectable.dart';
 import 'package:med_rive/common/l10n/app_localizations.dart';
 import 'package:med_rive/common/navigation/med_rive_router.dart';
-import 'package:med_rive/features/breath_session/pages/breath_session_page.dart';
-import 'package:med_rive/features/onboarding/pages/onboarding_page.dart';
+import 'package:med_rive/features/breath_session/state/breath_session_cubit.dart';
 import 'package:med_rive/features/onboarding/state/onboarding/onboarding_bloc.dart';
-import 'package:med_rive/features/startup/pages/startup_page.dart';
+import 'package:med_rive/features/startup/state/startup_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _OnboardingBloc extends MockBloc<OnboardingEvent, OnboardingState>
+import '../../utils/user_preferences.dart';
+
+class _Status extends Mock implements GetOnboardingStatusUseCase {}
+
+class _User extends Mock implements GetUserUseCase {}
+
+class _Onboarding extends MockBloc<OnboardingEvent, OnboardingState>
     implements OnboardingBloc {}
 
 void main() {
-  late _OnboardingBloc bloc;
-  late StreamController<OnboardingState> states;
-  late MedRiveRouter router;
-
-  Future<void> mount(WidgetTester tester) async {
-    bloc = _OnboardingBloc();
-    states = StreamController<OnboardingState>.broadcast(sync: true);
-    whenListen(bloc, states.stream, initialState: const OnboardingState());
-    router = MedRiveRouter();
-    await tester.pumpWidget(
-      BlocProvider<OnboardingBloc>.value(
-        value: bloc,
-        child: MaterialApp.router(
-          routerConfig: router.router,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-        ),
-      ),
-    );
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
-    await tester.pump(const Duration(milliseconds: 400));
-  }
-
-  Future<void> emitState(WidgetTester tester, OnboardingState state) async {
-    states.add(state);
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
-    await tester.pump(const Duration(milliseconds: 400));
-  }
-
-  void flowTest(String name, Future<void> Function(WidgetTester) body) {
-    testWidgets(name, (tester) async {
-      await mount(tester);
-      try {
-        await body(tester);
-      } finally {
-        await tester.pumpWidget(const SizedBox.shrink());
-        await states.close();
+  for (final onboarded in [false, true]) {
+    testWidgets(
+      'startup navigates without waiting for profile; onboarded=$onboarded',
+      (t) async {
+        final flag = _Status(), getUser = _User(), onboarding = _Onboarding();
+        final profile = Completer<User>();
+        when(flag.call).thenAnswer((_) async => onboarded);
+        when(getUser.call).thenAnswer((_) => profile.future);
+        whenListen(
+          onboarding,
+          const Stream<OnboardingState>.empty(),
+          initialState: const OnboardingState(
+            status: OnboardingStatus.inProgress,
+          ),
+        );
+        final startups = <StartupCubit>[];
+        getIt.registerFactory<StartupCubit>(() {
+          final cubit = StartupCubit(flag);
+          startups.add(cubit);
+          return cubit;
+        });
+        getIt.registerFactory(
+          () => BreathSessionCubit(
+            getUser,
+            successfulPaceWriter(),
+            availablePaces(),
+          ),
+        );
+        final router = MedRiveRouter();
+        await t.pumpWidget(
+          BlocProvider<OnboardingBloc>.value(
+            value: onboarding,
+            child: MaterialApp.router(
+              routerConfig: router.router,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+            ),
+          ),
+        );
+        await t.pump();
+        await t.pump(const Duration(seconds: 1));
+        await t.pump(const Duration(seconds: 1));
+        expect(
+          router.router.routeInformationProvider.value.uri.path,
+          onboarded ? '/breath-session' : '/onboarding',
+        );
+        if (onboarded) {
+          verify(getUser.call).called(1);
+        } else {
+          verifyNever(getUser.call);
+        }
+        profile.complete(
+          User(
+            firstName: 'John',
+            lastName: 'Doe',
+            dateOfBirth: DateTime(1994, 5, 12),
+          ),
+        );
+        await t.pump();
+        await t.pump(const Duration(seconds: 1));
+        await t.pump(const Duration(seconds: 1));
+        expect(
+          router.router.routeInformationProvider.value.uri.path,
+          onboarded ? '/breath-session' : '/onboarding',
+        );
+        if (onboarded) {
+          expect(find.text('Find your flow.'), findsOneWidget);
+          expect(find.text('Loading your profile…'), findsNothing);
+        }
+        expect(startups.single.isClosed, isTrue);
+        when(flag.call).thenAnswer((_) async => false);
+        const StartupRoute().go(t.element(find.byType(Scaffold).first));
+        await t.pumpAndSettle();
+        expect(startups, hasLength(2));
+        expect(
+          router.router.routeInformationProvider.value.uri.path,
+          '/onboarding',
+        );
+        expect(t.takeException(), isNull);
+        await t.pumpWidget(const SizedBox());
         router.router.dispose();
-      }
-    });
+
+        await onboarding.close();
+        await getIt.reset();
+      },
+    );
   }
-
-  flowTest('startup waits without building onboarding or session', (
-    tester,
-  ) async {
-    expect(find.byType(StartupPage), findsOneWidget);
-    expect(find.byType(AppBar), findsNothing);
-    expect(
-      tester.getSize(find.byKey(const ValueKey('startup-rive-slot'))).height,
-      280,
-    );
-    expect(find.text('med rive'), findsOneWidget);
-    expect(find.text('A moment for yourself.'), findsOneWidget);
-    await emitState(
-      tester,
-      const OnboardingState(status: OnboardingStatus.loading),
-    );
-    await tester.pump(const Duration(seconds: 5));
-    expect(find.byType(LinearProgressIndicator), findsOneWidget);
-    expect(find.byType(OnboardingPage), findsNothing);
-    expect(find.byType(BreathSessionPage), findsNothing);
-    expect(router.router.routeInformationProvider.value.uri.path, '/');
-  });
-
-  for (final onboarded in [true, false]) {
-    flowTest('result $onboarded selects the route and replaces startup', (
-      tester,
-    ) async {
-      await emitState(
-        tester,
-        OnboardingState(
-          status: onboarded
-              ? OnboardingStatus.completed
-              : OnboardingStatus.inProgress,
-        ),
-      );
-      expect(find.byType(StartupPage), findsNothing);
-      expect(
-        find.byType(OnboardingPage),
-        onboarded ? findsNothing : findsOneWidget,
-      );
-      expect(
-        find.byType(BreathSessionPage),
-        onboarded ? findsOneWidget : findsNothing,
-      );
-      expect(
-        router.router.routeInformationProvider.value.uri.path,
-        onboarded ? '/breath-session' : '/onboarding',
-      );
-      expect(router.router.canPop(), isFalse);
-      await tester.binding.handlePopRoute();
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
-      await tester.pump(const Duration(milliseconds: 400));
-      expect(find.byType(StartupPage), findsNothing);
-    });
-  }
-
-  flowTest('read failure shows an error and stays on startup', (tester) async {
-    final error = LocalStorageReadException(
-      StateError('read'),
-      'Unable to read',
-    );
-    await emitState(
-      tester,
-      OnboardingState(status: OnboardingStatus.failure, exception: error),
-    );
-    expect(find.byType(StartupPage), findsOneWidget);
-    expect(
-      find.text('We couldn’t load your preferences. Please try again.'),
-      findsOneWidget,
-    );
-    await tester.tap(find.widgetWithText(FilledButton, 'Try again'));
-    verify(() => bloc.add(const OnboardingStarted())).called(1);
-    expect(find.byType(OnboardingPage), findsNothing);
-    expect(find.byType(BreathSessionPage), findsNothing);
-    expect(router.router.routeInformationProvider.value.uri.path, '/');
-  });
-
-  flowTest('finishing onboarding sends an event and waits for save success', (
-    tester,
-  ) async {
-    await emitState(
-      tester,
-      const OnboardingState(status: OnboardingStatus.inProgress),
-    );
-    await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
-    verify(() => bloc.add(const SetOnboarding(true))).called(1);
-    await emitState(
-      tester,
-      const OnboardingState(status: OnboardingStatus.loading),
-    );
-    expect(find.byType(OnboardingPage), findsOneWidget);
-    expect(find.byType(BreathSessionPage), findsNothing);
-    expect(find.text('Loading...'), findsOneWidget);
-    await emitState(
-      tester,
-      const OnboardingState(status: OnboardingStatus.completed),
-    );
-    expect(find.byType(BreathSessionPage), findsOneWidget);
-    expect(find.byType(OnboardingPage), findsNothing);
-    expect(router.router.canPop(), isFalse);
-  });
-
-  flowTest('failed persistence does not navigate to the session', (
-    tester,
-  ) async {
-    await emitState(
-      tester,
-      const OnboardingState(status: OnboardingStatus.inProgress),
-    );
-    await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
-    await emitState(
-      tester,
-      const OnboardingState(status: OnboardingStatus.loading),
-    );
-    await emitState(
-      tester,
-      OnboardingState(
-        status: OnboardingStatus.failure,
-        exception: LocalStorageWriteException(StateError('write')),
-      ),
-    );
-    expect(find.byType(OnboardingPage), findsOneWidget);
-    expect(find.byType(BreathSessionPage), findsNothing);
-    expect(
-      router.router.routeInformationProvider.value.uri.path,
-      '/onboarding',
-    );
-  });
 }

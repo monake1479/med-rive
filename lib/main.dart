@@ -7,7 +7,6 @@ import 'package:med_rive/med_rive_app.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
-  final onboardingBloc = getIt<OnboardingBloc>()
-    ..add(const OnboardingStarted());
+  final onboardingBloc = getIt<OnboardingBloc>();
   runApp(BlocProvider.value(value: onboardingBloc, child: const MedRiveApp()));
 }

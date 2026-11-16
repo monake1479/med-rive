@@ -146,8 +146,8 @@ void main() {
     build: buildBloc,
     act: (bloc) async {
       final read = Completer<bool>();
-      final writeStarted = Completer<void>();
-      final write = Completer<void>();
+      final writeStarted = Completer();
+      final write = Completer();
       when(getStatus.call).thenAnswer((_) => read.future);
       when(() => setStatus(true)).thenAnswer((_) {
         writeStarted.complete();

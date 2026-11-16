@@ -5,6 +5,8 @@ class StartupRoute extends GoRouteData with $StartupRoute {
   const StartupRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const StartupPage();
+  Widget build(BuildContext context, GoRouterState state) => BlocProvider(
+    create: (context) => getIt.get<StartupCubit>(),
+    child: const StartupPage(),
+  );
 }
