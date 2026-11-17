@@ -7,7 +7,6 @@ import 'package:med_rive/common/error_handling/breathing_pace_exceptions/breathi
 class BreathingPaceDataSource {
   Future<List<int>> get() async {
     try {
-      // This Future.delayed is provided only to imitate backend connection delay.
       await Future.delayed(const Duration(milliseconds: 500));
       return const [6, 8, 10];
     } catch (e, s) {

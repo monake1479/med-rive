@@ -37,6 +37,10 @@ import 'package:med_rive/common/data/user/use_cases/set_user_pace_use_case.dart'
 import 'package:med_rive/common/data/user/user_repository.dart' as _i873;
 import 'package:med_rive/common/injection/storage_module.dart' as _i548;
 import 'package:med_rive/common/navigation/med_rive_router.dart' as _i393;
+import 'package:med_rive/common/rive/ribbon/rive_ribbon_playback.dart' as _i289;
+import 'package:med_rive/common/rive/ribbon/state/ribbon_flow_cubit.dart'
+    as _i254;
+import 'package:med_rive/common/rive/shared/rive_asset_player.dart' as _i109;
 import 'package:med_rive/features/breath_session/state/breath_session_cubit.dart'
     as _i591;
 import 'package:med_rive/features/onboarding/state/onboarding/onboarding_bloc.dart'
@@ -54,6 +58,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final storageModule = _$StorageModule();
+    gh.factory<_i109.RiveAssetPlayer>(() => _i109.RiveAssetPlayer());
     gh.lazySingleton<_i568.BreathingPaceDataSource>(
       () => _i568.BreathingPaceDataSource(),
     );
@@ -97,8 +102,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i263.StartupCubit>(
       () => _i263.StartupCubit(gh<_i619.GetOnboardingStatusUseCase>()),
     );
+    gh.factory<_i289.RiveRibbonPlayback>(
+      () => _i289.RiveRibbonPlayback(gh<_i109.RiveAssetPlayer>()),
+    );
     gh.factory<_i161.GetBreathingPacesUseCase>(
       () => _i161.GetBreathingPacesUseCase(gh<_i416.BreathingPaceRepository>()),
+    );
+    gh.factory<_i254.RibbonFlowCubit>(
+      () => _i254.RibbonFlowCubit(gh<_i289.RiveRibbonPlayback>()),
     );
     gh.factory<_i591.BreathSessionCubit>(
       () => _i591.BreathSessionCubit(

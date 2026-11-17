@@ -1,13 +1,17 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:med_rive/common/rive/ribbon/ribbon_stage.dart';
+import 'package:med_rive/common/rive/ribbon/widgets/ribbon_animation_target.dart';
 
 class OnboardingSlide extends StatelessWidget {
   const OnboardingSlide({
     super.key,
+    required this.stage,
     required this.upperTitle,
     required this.title,
     required this.description,
   });
 
+  final RibbonStage stage;
   final String upperTitle;
   final String title;
   final String description;
@@ -20,8 +24,10 @@ class OnboardingSlide extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // TODO(Daniel): Replace this SizedBox with real Rive animation.
-          const SizedBox(height: 304, width: double.infinity),
+          RibbonAnimationTarget(
+            stage: stage,
+            child: const SizedBox(height: 304, width: double.infinity),
+          ),
           const SizedBox(height: 24),
           Text(
             upperTitle,

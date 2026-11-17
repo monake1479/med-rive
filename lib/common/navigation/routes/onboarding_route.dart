@@ -5,6 +5,10 @@ class OnboardingRoute extends GoRouteData with $OnboardingRoute {
   const OnboardingRoute();
 
   @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) =>
+      NoTransitionPage(key: state.pageKey, child: build(context, state));
+
+  @override
   Widget build(BuildContext context, GoRouterState state) =>
       const OnboardingPage();
 }

@@ -11,11 +11,51 @@ import 'package:med_rive/common/navigation/med_rive_router.dart';
 import 'package:med_rive/features/breath_session/state/breath_session_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../utils/fake_rive_ribbon_playback.dart';
 import '../../utils/user_preferences.dart';
 
 class _GetUser extends Mock implements GetUserUseCase {}
 
 void main() {
+  setUp(registerRibbonFlowCubit);
+  tearDown(getIt.reset);
+  for (final viewport in [const Size(448, 998), const Size(412, 915)]) {
+    testWidgets('plan action stays at the bottom on $viewport', (tester) async {
+      tester.view.physicalSize = viewport;
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      getIt.registerFactory<BreathSessionCubit>(
+        () => BreathSessionCubit(
+          GetUserUseCase(UserRepository(MemoryUserRemoteDataSource())),
+          successfulPaceWriter(),
+          availablePaces(),
+        ),
+      );
+      final router = MedRiveRouter();
+      addTearDown(router.router.dispose);
+      router.router.go('/breath-session');
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: router.router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
+      final footer = tester.getRect(
+        find.text('Your selection shapes the next screen.'),
+      );
+      expect(footer.bottom, closeTo(viewport.height - 24, 1));
+      expect(
+        find.widgetWithText(FilledButton, 'See my plan').hitTestable(),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    });
+  }
+
   testWidgets('picker waits for profile and first shows saved pace', (
     tester,
   ) async {

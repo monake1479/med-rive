@@ -2,6 +2,9 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:med_rive/common/data/user/models/user.dart';
 import 'package:med_rive/common/l10n/app_localizations.dart';
+import 'package:med_rive/common/rive/ribbon/ribbon_stage.dart';
+import 'package:med_rive/common/rive/ribbon/widgets/ribbon_animation_target.dart';
+import 'package:med_rive/common/rive/ribbon/widgets/ribbon_breathing_pace.dart';
 import 'package:med_rive/common/widgets/reset_app_button.dart';
 
 class BreathPlanPage extends StatelessWidget {
@@ -41,7 +44,16 @@ class BreathPlanPage extends StatelessWidget {
                     l10n.planGreeting(user.firstName),
                     style: textTheme.headlineLarge,
                   ),
-                  const SizedBox(key: ValueKey('plan-rive-slot'), height: 184),
+                  RibbonBreathingPace(
+                    breathsPerMinute: pace,
+                    child: RibbonAnimationTarget(
+                      stage: RibbonStage.plan,
+                      child: const SizedBox(
+                        key: ValueKey('plan-rive-slot'),
+                        height: 184,
+                      ),
+                    ),
+                  ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: CircleAvatar(

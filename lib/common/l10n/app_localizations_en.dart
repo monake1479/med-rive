@@ -16,6 +16,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonLoading => 'Loading...';
 
   @override
+  String get ribbonLoadError => 'The animation couldn’t load.';
+
+  @override
   String get commonRetry => 'Try again';
 
   @override

@@ -32,7 +32,6 @@ class UserRemoteDataSource {
 
   Future<UserDto> get() async {
     try {
-      // This Future.delayed is provided only to imitate backend connection delay.
       await Future.delayed(const Duration(seconds: 2));
       return await _readUser();
     } catch (e, s) {
@@ -45,7 +44,6 @@ class UserRemoteDataSource {
 
   Future<UserDto> updatePace(int? pace) async {
     try {
-      // This Future.delayed is provided only to imitate backend connection delay.
       await Future.delayed(const Duration(seconds: 2));
       final currentUser = await _readUser();
       final user = UserDto(

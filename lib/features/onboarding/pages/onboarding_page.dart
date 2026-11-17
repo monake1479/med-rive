@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:med_rive/common/l10n/app_localizations.dart';
 import 'package:med_rive/common/navigation/med_rive_router.dart';
+import 'package:med_rive/common/rive/ribbon/ribbon_stage.dart';
+import 'package:med_rive/common/rive/ribbon/state/ribbon_flow_cubit.dart';
 import 'package:med_rive/features/onboarding/state/onboarding/onboarding_bloc.dart';
 import 'package:med_rive/features/onboarding/widgets/onboarding_slide.dart';
 
@@ -26,12 +28,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Future<void> _showPage(int page) async {
     if (_moving) return;
     setState(() => _moving = true);
-    await _pageController.animateToPage(
-      page,
-      duration: const Duration(milliseconds: 350),
-      curve: Curves.easeInOutCubic,
+    await context.read<RibbonFlowCubit>().showStage(
+      page == 0 ? RibbonStage.welcome : RibbonStage.rhythm,
     );
-    if (mounted) setState(() => _moving = false);
+    if (!mounted) return;
+    _pageController.jumpToPage(page);
+    setState(() => _moving = false);
   }
 
   @override
@@ -41,13 +43,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
     return BlocConsumer<OnboardingBloc, OnboardingState>(
       listenWhen: (previous, current) => previous.status != current.status,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.status.isCompleted) {
+          await context.read<RibbonFlowCubit>().showStage(RibbonStage.plan);
+          if (!context.mounted) return;
           const BreathSessionRoute().go(context);
         }
       },
       builder: (context, state) {
-        final busy = state.status.isLoading || _moving;
+        final busy =
+            state.status.isLoading ||
+            _moving ||
+            context.watch<RibbonFlowCubit>().state.isTransitioning;
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -106,11 +113,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         onPageChanged: (page) => setState(() => _page = page),
                         children: [
                           OnboardingSlide(
+                            stage: RibbonStage.welcome,
                             upperTitle: l10n.onboardingWelcomeUpperTitle,
                             title: l10n.onboardingWelcomeTitle,
                             description: l10n.onboardingWelcomeDescription,
                           ),
                           OnboardingSlide(
+                            stage: RibbonStage.rhythm,
                             upperTitle: l10n.onboardingRhythmUpperTitle,
                             title: l10n.onboardingRhythmTitle,
                             description: l10n.onboardingRhythmDescription,

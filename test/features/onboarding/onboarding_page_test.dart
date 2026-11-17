@@ -4,15 +4,22 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:med_rive/common/injection/injectable.dart';
 import 'package:med_rive/common/l10n/app_localizations.dart';
+import 'package:med_rive/common/rive/ribbon/ribbon_flow_shell.dart';
+import 'package:med_rive/common/rive/ribbon/ribbon_stage.dart';
 import 'package:med_rive/features/onboarding/pages/onboarding_page.dart';
 import 'package:med_rive/features/onboarding/state/onboarding/onboarding_bloc.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../../utils/fake_rive_ribbon_playback.dart';
 
 class _Bloc extends MockBloc<OnboardingEvent, OnboardingState>
     implements OnboardingBloc {}
 
 void main() {
+  setUp(registerRibbonFlowCubit);
+  tearDown(getIt.reset);
   testWidgets(
     'slides advance only by button; final action saves and failure allows retry',
     (tester) async {
@@ -31,7 +38,10 @@ void main() {
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const OnboardingPage(),
+            home: const RibbonFlowShell(
+              entryStage: RibbonStage.welcome,
+              child: OnboardingPage(),
+            ),
           ),
         ),
       );
