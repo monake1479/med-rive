@@ -4,6 +4,8 @@ import 'package:injectable/injectable.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:med_rive/common/data/user/models/user.dart';
 import 'package:med_rive/common/injection/injectable.dart';
+import 'package:med_rive/common/rive/ribbon/ribbon_flow_shell.dart';
+import 'package:med_rive/common/rive/ribbon/ribbon_stage.dart';
 import 'package:med_rive/features/breath_session/pages/breath_plan_page.dart';
 import 'package:med_rive/features/breath_session/pages/breath_session_page.dart';
 import 'package:med_rive/features/breath_session/state/breath_session_cubit.dart';
@@ -21,10 +23,28 @@ part 'routes/startup_route.dart';
 class MedRiveRouter {
   MedRiveRouter()
     : _goRouter = GoRouter(
-        routes: $appRoutes,
+        routes: [
+          ShellRoute(
+            builder: (context, state, child) => RibbonFlowShell(
+              entryStage: _entryStageFor(state),
+              child: child,
+            ),
+            routes: $appRoutes,
+          ),
+        ],
         initialLocation: const StartupRoute().location,
       );
 
   final GoRouter _goRouter;
   GoRouter get router => _goRouter;
+}
+
+RibbonStage _entryStageFor(GoRouterState state) {
+  if (state.uri.path == const StartupRoute().location) {
+    return RibbonStage.startup;
+  }
+  if (state.uri.path == const OnboardingRoute().location) {
+    return RibbonStage.welcome;
+  }
+  return RibbonStage.plan;
 }

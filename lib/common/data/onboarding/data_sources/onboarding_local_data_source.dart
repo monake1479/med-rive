@@ -15,7 +15,6 @@ class OnboardingLocalDataSource {
 
   Future<bool> get() async {
     try {
-      // This Future.delayed is provided only to imitate backend connection delay.
       await Future.delayed(Duration(seconds: 2));
 
       return await _preferences.getBool(_onboardedKey) ?? false;
@@ -32,7 +31,6 @@ class OnboardingLocalDataSource {
 
   Future<void> set(bool onboarding) async {
     try {
-      // This Future.delayed is provided only to imitate backend connection delay.
       await Future.delayed(Duration(seconds: 2));
       await _preferences.setBool(_onboardedKey, onboarding);
     } catch (e, s) {

@@ -6,6 +6,10 @@ class BreathPlanRoute extends GoRouteData with $BreathPlanRoute {
   final User $extra;
   final int pace;
   @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) =>
+      NoTransitionPage(key: state.pageKey, child: build(context, state));
+
+  @override
   Widget build(BuildContext context, GoRouterState state) =>
       BreathPlanPage(user: $extra, pace: pace);
 }

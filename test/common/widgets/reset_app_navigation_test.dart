@@ -17,6 +17,7 @@ import 'package:med_rive/features/reset_app/state/reset_app_cubit.dart';
 import 'package:med_rive/features/startup/state/startup_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../utils/fake_rive_ribbon_playback.dart';
 import '../../utils/user_preferences.dart';
 
 class _Flag extends Mock implements GetOnboardingStatusUseCase {}
@@ -31,6 +32,8 @@ class _Onboarding extends MockBloc<OnboardingEvent, OnboardingState>
     implements OnboardingBloc {}
 
 void main() {
+  setUp(registerRibbonFlowCubit);
+  tearDown(getIt.reset);
   for (final path in ['/breath-session', '/breath-plan?pace=8']) {
     testWidgets('confirmed reset from $path replaces routes with onboarding', (
       t,

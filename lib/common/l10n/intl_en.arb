@@ -2,6 +2,7 @@
     "@@locale": "en",
     "appName": "Med Rive",
     "commonLoading": "Loading...",
+    "ribbonLoadError": "The animation couldn’t load.",
     "commonRetry": "Try again",
     "onboardingPageTitle": "Onboarding",
     "onboardButtonLabel": "Continue",

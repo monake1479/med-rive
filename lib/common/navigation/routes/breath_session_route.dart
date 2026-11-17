@@ -8,6 +8,10 @@ class BreathSessionRoute extends GoRouteData with $BreathSessionRoute {
   const BreathSessionRoute();
 
   @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) =>
+      NoTransitionPage(key: state.pageKey, child: build(context, state));
+
+  @override
   Widget build(BuildContext context, GoRouterState state) => BlocProvider(
     create: (_) => getIt<BreathSessionCubit>(),
     child: const BreathSessionPage(),

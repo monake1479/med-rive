@@ -15,6 +15,7 @@ import 'package:med_rive/features/onboarding/state/onboarding/onboarding_bloc.da
 import 'package:med_rive/features/startup/state/startup_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../utils/fake_rive_ribbon_playback.dart';
 import '../../utils/user_preferences.dart';
 
 class _Status extends Mock implements GetOnboardingStatusUseCase {}
@@ -25,6 +26,8 @@ class _Onboarding extends MockBloc<OnboardingEvent, OnboardingState>
     implements OnboardingBloc {}
 
 void main() {
+  setUp(registerRibbonFlowCubit);
+  tearDown(getIt.reset);
   for (final onboarded in [false, true]) {
     testWidgets(
       'startup navigates without waiting for profile; onboarded=$onboarded',

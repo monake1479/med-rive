@@ -30,6 +30,7 @@ dependencies:
   package_info_plus: ^10.2.2
   path: ^1.9.1
   path_provider: ^2.1.6
+  rive: ^0.14.11
   shared_preferences: ^2.5.6
   uuid: ^4.6.0
 
@@ -42,8 +43,12 @@ dev_dependencies:
     sdk: flutter
   go_router_builder: ^4.5.3
   injectable_generator: 
+  integration_test:
+    sdk: flutter
 
 
 flutter:
   generate: true
   uses-material-design: true
+  assets:
+    - assets/rive/breathing_ribbon.riv

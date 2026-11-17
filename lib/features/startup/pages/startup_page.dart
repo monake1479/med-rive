@@ -2,6 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:med_rive/common/l10n/app_localizations.dart';
 import 'package:med_rive/common/navigation/med_rive_router.dart';
+import 'package:med_rive/common/rive/ribbon/ribbon_stage.dart';
+import 'package:med_rive/common/rive/ribbon/state/ribbon_flow_cubit.dart';
+import 'package:med_rive/common/rive/ribbon/widgets/ribbon_animation_target.dart';
 import 'package:med_rive/features/startup/state/startup_cubit.dart';
 
 class StartupPage extends StatefulWidget {
@@ -26,10 +29,15 @@ class _StartupPageState extends State<StartupPage> {
     return Scaffold(
       body: BlocConsumer<StartupCubit, StartupStatus>(
         listenWhen: (previous, current) => previous != current,
-        listener: (context, state) {
+        listener: (context, state) async {
+          final ribbonFlowCubit = context.read<RibbonFlowCubit>();
           if (state.isInOnboarding) {
+            await ribbonFlowCubit.showStage(RibbonStage.welcome);
+            if (!context.mounted) return;
             const OnboardingRoute().go(context);
           } else if (state.isReady) {
+            await ribbonFlowCubit.showStage(RibbonStage.plan);
+            if (!context.mounted) return;
             const BreathSessionRoute().go(context);
           }
         },
@@ -54,11 +62,13 @@ class _StartupPageState extends State<StartupPage> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // TODO(Daniel): Replace this SizedBox with real Rive animation.
-                                  const SizedBox(
-                                    key: ValueKey('startup-rive-slot'),
-                                    height: 280,
-                                    width: double.infinity,
+                                  const RibbonAnimationTarget(
+                                    stage: RibbonStage.startup,
+                                    child: SizedBox(
+                                      key: ValueKey('startup-rive-slot'),
+                                      height: 280,
+                                      width: double.infinity,
+                                    ),
                                   ),
                                   const SizedBox(height: 24),
                                   Text(

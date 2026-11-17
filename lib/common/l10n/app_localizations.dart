@@ -106,6 +106,12 @@ abstract class AppLocalizations {
   /// **'Loading...'**
   String get commonLoading;
 
+  /// No description provided for @ribbonLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'The animation couldn’t load.'**
+  String get ribbonLoadError;
+
   /// No description provided for @commonRetry.
   ///
   /// In en, this message translates to:
